@@ -13,9 +13,12 @@ void RecursiveBackTraing(int y, int x);
 int inRange(int y, int x);
 void shuffleArray(int* array, int size);
 void Show_Maze();
+void BinaryTree();
+void Init_Visited();
 
 void BFS_of_DFS_Function(int y, int x) {
 	Init_Visited();
+
 	/*
 	
 		Add Your COde
@@ -46,6 +49,7 @@ void Init_Visited() {
 		}
 	}
 }
+
 void GenerateByBinaryTree()
 {
 	for (int y = 0; y < SIZE; y++) {
@@ -58,7 +62,11 @@ void GenerateByBinaryTree()
 			}
 		}
 	}
+	//미로 생성 알고리즘 1번
 	RecursiveBackTraing(1, 1);
+
+	//미로 생성 알고리즘 2번
+	//BinaryTree();
 	printf("정상 실행\n");
 	//결승점 설정
 	board[SIZE - 2][SIZE - 1] = 2;
@@ -119,4 +127,27 @@ void Show_Maze() {
 	}
 }
 
-
+//바이너리 트리 미로 생성 알고리즘
+void BinaryTree() {
+	for (int i = 0; i < SIZE; i++) {
+		for (int j = 0; j < SIZE-1; j++) {
+			if (i % 2 == 0 || j % 2 == 0)
+				continue;
+			int r = rand() % 2;
+			if (i == SIZE - 2) {
+				board[i][j + 1] = 1;
+				continue;
+			}
+			else if (j == SIZE - 2) {
+				board[i + 1][j] = 1;
+				continue;
+			}
+			else if (r == 0) {
+				board[i][j+1] = 1;
+			}
+			else {
+				board[i+1][j] = 1;
+			}
+		}
+	}
+}
