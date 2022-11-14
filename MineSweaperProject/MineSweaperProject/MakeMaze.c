@@ -59,8 +59,8 @@ int main() {
 		Point p = Pop();
 		printf("%d %d\n", p.x , p.y);
 	}
-	//Init();
-	//Show_Maze();
+	Init();
+	Show_Maze();
 	//BFS_of_DFS_Function(1, 1);
 }
 
