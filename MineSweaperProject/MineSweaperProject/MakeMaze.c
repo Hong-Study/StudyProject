@@ -1,26 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 #define SIZE 21
 
-int** board;
-int DIR[4][2] = { {0,-2},{0,+2},{-2,0},{+2,0} };
-int visited[SIZE][SIZE] = { 0 };
+typedef struct Node {
+	int value;
+	struct Node* next;
+}Node;
 
-void Init();
-void GenerateByBinaryTree();
-void RecursiveBackTraing(int y, int x);
-int inRange(int y, int x);
+Node* head = NULL;
+Node* tail = NULL;
+
+int** board; // 맵 주체 0 = 벽, 1 = 이동공간, 2 = 도착(GOAL) board[21][21] 생성 되있음.
+int DIR[4][2] = { {0,-2},{0,+2},{-2,0},{+2,0} }; 
+int visited[SIZE][SIZE] = { 0 }; // 한번 방문 했는지 확인하는 배열
+
+void Init(); // 보드 초기화
+void GenerateByBinaryTree(); // 보드 생성 알고리즘 함수
+void RecursiveBackTraing(int y, int x); // 미로 생성 알고리즘 1번
+int inRange(int y, int x); // 값이 미로보다 커졌는지 - 오버플로우 잡아주는 함수
 void shuffleArray(int* array, int size);
-void Show_Maze();
-void BinaryTree();
-void Init_Visited();
+void Show_Maze();	// 미로 보이게하는 함수
+void BinaryTree();	// 미로 생성 알고리즘 2번
+void Init_Visited();   // visited = 0 초기화
 
-void BFS_of_DFS_Function(int y, int x) {
+//데이터 넣기
+void Insert(int value);
+//데이터 빼기
+int Pop(); // 만약 비어있을 시 -1 리턴
+//Queue 빈 데이터 체크
+int Is_Empty(); // 1 = 비어있음, 0 = 데이터 있음
+
+void BFS_or_DFS_Function(int y, int x) {
 	Init_Visited();
 
+	//본인이 원하는 알고리즘 써서 검색하시면 됩니다.
+
 	/*
-	
+
 		Add Your COde
 
 	*/
@@ -28,9 +46,15 @@ void BFS_of_DFS_Function(int y, int x) {
 
 int main() {
 	srand((unsigned int)time(NULL));
-	Init();
-	Show_Maze();
-	BFS_of_DFS_Function(1, 1);
+	Insert(5);
+	Insert(7);
+	Insert(8);
+	Insert(9);
+	for (int i = 0; i < 5; i++)
+		printf("%d\n", Pop());
+	//Init();
+	//Show_Maze();
+	//BFS_of_DFS_Function(1, 1);
 }
 
 void Init() {
@@ -48,6 +72,41 @@ void Init_Visited() {
 			visited[i][j] = 0;
 		}
 	}
+}
+
+void Insert(int value)
+{
+	Node* node = (Node*)malloc(sizeof(Node));
+	node->value = value;
+	node->next = NULL;
+	if (head == NULL) {
+		head = node;
+		tail = node;
+	}else {
+		tail->next = node;
+		tail = node;
+	}
+}
+
+int Pop()
+{
+	if (Is_Empty())
+		return -1;
+	Node* node = head;
+	head = head->next;
+	if (head == NULL)
+		tail = NULL;
+	int value = node->value;
+	free(node);
+
+	return value;
+}
+
+int Is_Empty()
+{
+	if (head == NULL)
+		return 1;
+	return 0;
 }
 
 void GenerateByBinaryTree()
@@ -71,7 +130,6 @@ void GenerateByBinaryTree()
 	//결승점 설정
 	board[SIZE - 2][SIZE - 1] = 2;
 }
-
 
 void shuffleArray(int* array, int size) {
 	int i, r, temp;
