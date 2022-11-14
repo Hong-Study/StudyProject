@@ -7,23 +7,45 @@ int** board;
 int DIR[4][2] = { {0,-2},{0,+2},{-2,0},{+2,0} };
 int visited[SIZE][SIZE] = { 0 };
 
-void RecursiveBackTraing(int y, int x);
 void Init();
 void GenerateByBinaryTree();
+void RecursiveBackTraing(int y, int x);
 int inRange(int y, int x);
 void shuffleArray(int* array, int size);
+void Show_Maze();
+
+void BFS_of_DFS_Function(int y, int x) {
+	Init_Visited();
+	/*
+	
+		Add Your COde
+
+	*/
+}
+
+int main() {
+	srand((unsigned int)time(NULL));
+	Init();
+	Show_Maze();
+	BFS_of_DFS_Function(1, 1);
+}
 
 void Init() {
 	board = (int**)malloc(sizeof(int*) * SIZE);
 	for (int i = 0; i < SIZE; i++) {
 		board [i] = (int*)malloc(sizeof(int) * SIZE);
+	}
+	Init_Visited();
+	GenerateByBinaryTree();
+}
+
+void Init_Visited() {
+	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			visited[i][j] = 0;
 		}
 	}
-	GenerateByBinaryTree();
 }
-
 void GenerateByBinaryTree()
 {
 	for (int y = 0; y < SIZE; y++) {
@@ -38,7 +60,8 @@ void GenerateByBinaryTree()
 	}
 	RecursiveBackTraing(1, 1);
 	printf("정상 실행\n");
-	board[SIZE - 2][SIZE - 2] = 1;
+	//결승점 설정
+	board[SIZE - 2][SIZE - 1] = 2;
 }
 
 
@@ -95,8 +118,5 @@ void Show_Maze() {
 		printf("\n");
 	}
 }
-int main() {
-	srand((unsigned int)time(NULL));
-	Init();
-	Show_Maze();
-}
+
+
