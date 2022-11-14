@@ -4,8 +4,13 @@
 
 #define SIZE 21
 
+typedef struct Point {
+	int x;
+	int y;
+}Point;
+
 typedef struct Node {
-	int value;
+	Point value;
 	struct Node* next;
 }Node;
 
@@ -26,9 +31,9 @@ void BinaryTree();	// 미로 생성 알고리즘 2번
 void Init_Visited();   // visited = 0 초기화
 
 //데이터 넣기
-void Insert(int value);
+void Insert(int x, int y);
 //데이터 빼기
-int Pop(); // 만약 비어있을 시 -1 리턴
+Point Pop(); // 만약 비어있을 시 -1 리턴
 //Queue 빈 데이터 체크
 int Is_Empty(); // 1 = 비어있음, 0 = 데이터 있음
 
@@ -46,12 +51,14 @@ void BFS_or_DFS_Function(int y, int x) {
 
 int main() {
 	srand((unsigned int)time(NULL));
-	Insert(5);
-	Insert(7);
-	Insert(8);
-	Insert(9);
-	for (int i = 0; i < 5; i++)
-		printf("%d\n", Pop());
+	Insert(5, 2);
+	Insert(7, 5);
+	Insert(8, 8);
+	Insert(9, 1);
+	for (int i = 0; i < 5; i++) {
+		Point p = Pop();
+		printf("%d %d\n", p.x , p.y);
+	}
 	//Init();
 	//Show_Maze();
 	//BFS_of_DFS_Function(1, 1);
@@ -74,10 +81,13 @@ void Init_Visited() {
 	}
 }
 
-void Insert(int value)
+void Insert(int x, int y)
 {
 	Node* node = (Node*)malloc(sizeof(Node));
-	node->value = value;
+	Point p;
+	p.x = x;
+	p.y = y;
+	node->value = p;
 	node->next = NULL;
 	if (head == NULL) {
 		head = node;
@@ -88,15 +98,19 @@ void Insert(int value)
 	}
 }
 
-int Pop()
+Point Pop()
 {
-	if (Is_Empty())
-		return -1;
+	if (Is_Empty()) {
+		Point p;
+		p.x = -1;
+		p.y = -1;
+		return p;
+	}
 	Node* node = head;
 	head = head->next;
 	if (head == NULL)
 		tail = NULL;
-	int value = node->value;
+	Point value = node->value;
 	free(node);
 
 	return value;
